@@ -1,8 +1,9 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, redirect } from 'react-router-dom'
 import Aprendizaje from '../pages/Aprendizaje'
-import Juego from '../pages/Juego'
+import Juegos from '../pages/Juegos'
 import DefaultLayout from '../layouts/DefaultLayout'
 import JuegoVista from '../pages/JuegoVista'
+import AprendizajeVista from '../pages/AprendizajeVista'
 
 export const routes = createBrowserRouter([
     {
@@ -10,17 +11,33 @@ export const routes = createBrowserRouter([
         element: <DefaultLayout />,
         children: [
             {
+                path: "",
+                loader: () => redirect('/aprendizaje')
+            },
+            {
                 path: "/aprendizaje",
-                element: <Aprendizaje />
+                children: [
+                    {
+                        path: "",
+                        element: <Aprendizaje />,
+                    },
+                    {
+                        path: ":curso",
+                        element: <AprendizajeVista />
+                    },
+                ]
             },
             {
                 path: "/juegos",
-                element: <Juego />,
                 children: [
+                    {
+                        path: "",
+                        element: <Juegos />,
+                    },
                     {
                         path: ":juego",
                         element: <JuegoVista />
-                    }
+                    },
                 ]
             },
         ]

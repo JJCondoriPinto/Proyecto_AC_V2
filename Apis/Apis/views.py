@@ -1,19 +1,20 @@
-from rest_framework import views, viewsets
+from rest_framework import viewsets
+from .models import Quizz, Curso, PalabraClave, Topico
+from .serializers import QuizzSerializer, CursoSerializer, PalabraClaveSerializer, TopicoSerializer
 
 # Create your views here.
-class Aprendizaje1(views.APIView):
-    def get(self, request):
-        pass
-    def post(self, request):
-        pass
-    def delete(self, request):
-        pass
+class QuizzAPI(viewsets.ModelViewSet):
+    serializer_class = QuizzSerializer
+    queryset = Quizz.objects.all()
     
-class Aprendizaje2(viewsets.ViewSet):
-    def get(self, request):
-        pass
-    def post(self, request):
-        pass
-    def delete(self, request):
-        pass
+class CursoAPI(viewsets.ModelViewSet):
+    serializer_class = CursoSerializer
+    queryset = Curso.objects.all()
     
+class PalabraClaveAPI(viewsets.ModelViewSet):
+    serializer_class = PalabraClaveSerializer
+    queryset = PalabraClave.objects.all()
+    
+class TopicoAPI(viewsets.ModelViewSet):
+    serializer_class = TopicoSerializer
+    queryset = Topico.objects.all()
