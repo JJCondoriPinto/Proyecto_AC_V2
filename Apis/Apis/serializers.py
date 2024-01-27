@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import Quizz, Curso, Topico, PalabraClave
+from bson import ObjectId
 
 class QuizzSerializer(serializers.ModelSerializer):
-    cuestionario = serializers.JSONField()
     class Meta:
         model = Quizz
         fields = "__all__"
