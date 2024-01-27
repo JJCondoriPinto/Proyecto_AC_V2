@@ -1,9 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useQuizz } from "../hooks/useQuizz"
 import { useNavigate } from "react-router-dom"
+import { useVoice } from "../hooks/useVoice"
+import PreguntaQuizz from "../components/PreguntaQuizz"
 
 export default function FormularioQuizz() {
     const navigate = useNavigate()
+    const [speak] = useVoice()
     const quizz = useQuizz()
     const [puntaje, setPuntaje] = useState(0)
     const [pregunta, setPregunta] = useState(0)
@@ -11,13 +14,18 @@ export default function FormularioQuizz() {
 
     const handleNext = () => {
         if (opcion === undefined) {
+            speak("Debe seleccionar una opcion")
             alert("Debe seleccionar una opcion")
             return;
         }
         if (opcion.valor) {
             setPuntaje(prev => prev + 1)
+            speak("Respuesta correcta :)")
             alert("Respuesta correcta :)")
-        } else alert("Respuesta incorrecta :(")
+        } else {
+            speak("Respuesta incorrecta :(")
+            alert("Respuesta incorrecta :(")
+        }
 
         setPregunta(prev => prev + 1)
     }
@@ -34,9 +42,13 @@ export default function FormularioQuizz() {
                         {pregunta === quizz.cuestionario.length ? (
                             <div className="w-full h-full flex flex-col">
                                 <p className="flex-1 flex items-center justify-center">
-                                    {puntaje > 3 ?
-                                        `Bien hecho, su puntaje es de ${puntaje}` :
-                                        `Su puntaje fue de ${puntaje} siga practicando!!`}
+                                    {(() => {
+                                        let texto = puntaje > 3 ?
+                                            `Bien hecho, su puntaje es de ${puntaje}` :
+                                            `Su puntaje fue de ${puntaje} siga practicando!!`
+                                        speak(texto)
+                                        return texto
+                                    })()}
                                 </p>
                                 <button className="mt-auto ms-auto bg-primary text-white rounded-md px-2 py-1" onClick={() => navigate("..")}>
                                     Finalizar
@@ -46,21 +58,7 @@ export default function FormularioQuizz() {
                             <div className="w-full h-full flex flex-col">
                                 <div className="flex items-center justify-center">
                                     {quizz.cuestionario.map((seccion, index) => pregunta === index ? (
-                                        <div key={index} className="flex flex-col gap-4 text-sm">
-                                            <p className="font-medium">{seccion.pregunta}</p>
-                                            <div className="ps-4 flex flex-col gap-1">
-                                                {seccion.respuestas.map((respuesta, index) => (
-                                                    <div key={index} className="flex gap-2">
-                                                        <input
-                                                            id={`id_opcion_${index}`}
-                                                            type="radio"
-                                                            name="opcion"
-                                                            onChange={() => setOpcion(respuesta)} />
-                                                        <label htmlFor={`id_opcion_${index}`}>{respuesta.opcion}</label>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
+                                        <PreguntaQuizz key={index} pregunta={seccion} onChange={(respuesta) => setOpcion(respuesta)} />
                                     ) : null)}
                                 </div>
                                 <button className="mt-auto ms-auto bg-primary text-white rounded-md px-2 py-1" onClick={handleNext}>
