@@ -1,9 +1,10 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import Juegos from '../pages/Juegos'
 import DefaultLayout from '../layouts/DefaultLayout'
-import JuegoVista from '../pages/JuegoVista'
 import AprendizajeVista from '../pages/AprendizajeVista'
 import CursosListado from '../pages/CursosListado'
+import ListadoQuizziz from '../pages/ListadoQuizziz'
+import FormularioQuizz from '../pages/FormularioQuizz'
 
 export const routes = createBrowserRouter([
     {
@@ -35,7 +36,10 @@ export const routes = createBrowserRouter([
                         element: <Juegos />,
                     },
                     {
-                        path: ":juego",
+                        path: "ahorcado",
+                    },
+                    {
+                        path: "test",
                         children: [
                             {
                                 path: "",
@@ -43,7 +47,16 @@ export const routes = createBrowserRouter([
                             },
                             {
                                 path: ":curso",
-                                element: <JuegoVista />
+                                children: [
+                                    {
+                                        path: "",
+                                        element: <ListadoQuizziz />
+                                    },
+                                    {
+                                        path: ":quizz",
+                                        element: <FormularioQuizz />
+                                    }
+                                ]
                             }
                         ]
                     },

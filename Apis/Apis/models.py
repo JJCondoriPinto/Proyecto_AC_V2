@@ -4,6 +4,9 @@ from djongo import models
 class Curso(models.Model):
     nombre = models.CharField(max_length=50, null=False)
     imagen = models.ImageField(upload_to="cursos/", default="cursos/default.png")
+    
+    def __str__(self):
+        return self.nombre
 
 # Topicos de cada curso (para aprendizaje)
 class Topico(models.Model):
