@@ -8,14 +8,17 @@ export default function AprendizajeVista() {
     const [input, setInput] = useState("");
     const [subtopicos, setSubtopicos] = useState([]); 
     const [infoTopico, setInfoTopico] = useState(""); 
+    const [hasSpoken, setHasSpoken] = useState(false); // Estado para controlar si ya se ha hablado
     const [speak] = useVoice();
     const { curso } = useParams(); 
     const [activar, desactivar, result, isActive] = useMicro();
 
     useEffect(() => {
-        speak(""); 
-        fetchSubtopicos(); 
-    }, [curso, speak]); 
+        if (!hasSpoken) { // Si aún no se ha hablado
+            speak(""); // Inicializa la síntesis de voz
+            fetchSubtopicos();
+        }
+    }, [curso, speak, hasSpoken]); // Agregar hasSpoken como dependencia
 
     useEffect(() => {
         setInput(result); 
@@ -29,11 +32,16 @@ export default function AprendizajeVista() {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             setSubtopicos(data); 
+            // Leer en voz alta los nombres de los subtópicos sólo si aún no se ha hablado
+            if (!hasSpoken) {
+                const nombresTopicos = data.map(t => t.nombre).join(", ");
+                speak(`Tópicos de ${curso}: ${nombresTopicos}`);
+                setHasSpoken(true); // Marcar que ya se ha hablado para no repetirlo
+            }
         } catch (error) {
             console.error('Hubo un problema con la petición fetch:', error);
         }
     };
-
     // Solicita la información de un subtópico específico
     const fetchInfoTopico = async (topicoNombre) => {
         try {

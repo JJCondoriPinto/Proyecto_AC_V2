@@ -16,23 +16,14 @@ class PalabraClaveAPI(viewsets.ModelViewSet):
     queryset = PalabraClave.objects.all()
     
 class TopicoAPI(viewsets.ModelViewSet):
-    """
     serializer_class = TopicoSerializer
     queryset = Topico.objects.all()
-    #prueba
     filter_backends = [filters.SearchFilter]
-    search_fields = ['contenido']
+    search_fields = ['nombre', 'informacion']  # Esto es para la funcionalidad de búsqueda
+
     def get_queryset(self):
-        queryset = Topico.objects.all()
-        search_param = self.request.query_params.get('search', None)
-        if search_param:
-            queryset = queryset.filter(
-                Q(contenido__nombre__icontains=search_param) | 
-                Q(contenido__informacion__icontains=search_param)
-            )
+        queryset = super().get_queryset()  # Obtiene la consulta base, que es Topico.objects.all()
+        curso_nombre = self.request.query_params.get('curso', None)
+        if curso_nombre:
+            queryset = queryset.filter(curso__nombre__icontains=curso_nombre)  # Filtra por nombre de curso
         return queryset
-    """
-    serializer_class = TopicoSerializer
-    queryset = Topico.objects.all()
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['nombre', 'informacion']  # Actualizado para buscar en los nuevos campos
