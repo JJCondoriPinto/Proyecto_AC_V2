@@ -41,7 +41,7 @@ export default function Aprendizaje() {
                 Arquitectura de computadoras (AC)
             </Card>
             <Card
-                to={"ada"}
+                to={"Analisis de datos y algortimos"}
                 imgSrc={algoritmos}
             >
                 Análisis de datos y algoritmos (ADA)
