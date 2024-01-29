@@ -13,10 +13,16 @@ class CursoSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class TopicoSerializer(serializers.ModelSerializer):
+    """
     class Meta:
         model = Topico
         fields = "__all__"
-
+    """
+    class Meta:
+        model = Topico
+        fields = ['curso', 'nombre', 'informacion']  # Actualizado para usar los nuevos campos
+        
+        
 class PalabraClaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = PalabraClave

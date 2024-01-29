@@ -5,8 +5,11 @@ class Curso(models.Model):
     nombre = models.CharField(max_length=50, null=False)
 
 class Topico(models.Model):
+    #curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    #contenido = models.JSONField()
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    contenido = models.JSONField()
+    nombre = models.CharField(max_length=255, default='')  # Campo nuevo
+    informacion = models.TextField(default='')
 
 class PalabraClave(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
