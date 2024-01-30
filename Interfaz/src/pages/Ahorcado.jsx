@@ -5,7 +5,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const Ahorcado = () => {
   const { juego } = useParams();
-  const [palabraOculta, setPalabraOculta] = useState("");
+  const [palabraOculta, setPalabraOculta] = useState([]);
   const [letrasAdivinadas, setLetrasAdivinadas] = useState([]);
   const [letrasIncorrectas, setLetrasIncorrectas] = useState([]);
   const [vidas, setVidas] = useState(6);
@@ -18,7 +18,8 @@ const Ahorcado = () => {
 
   const reiniciarJuego = () => {
     const palabras = ["perro", "gato", "casa", "árbol", "coche"];
-    setPalabraOculta(palabras[Math.floor(Math.random() * palabras.length)]);
+    const palabraSeleccionada = palabras[Math.floor(Math.random() * palabras.length)];
+    setPalabraOculta(palabraSeleccionada.split(""));
     setLetrasAdivinadas([]);
     setLetrasIncorrectas([]);
     setVidas(6);
@@ -43,7 +44,7 @@ const Ahorcado = () => {
     }
 
     setInputLetra("");
-    
+
     // Verificar si todas las letras han sido adivinadas
     if (!getPalabraOculta().includes("_")) {
       setEstadoJuego("ganado");
@@ -56,40 +57,53 @@ const Ahorcado = () => {
 
   const getPalabraOculta = () => {
     return palabraOculta
-      .split("")
-      .map(letra => (letrasAdivinadas.includes(letra) ? letra : "_"))
+      .map((letra) => (letrasAdivinadas.includes(letra) ? letra : "_"))
       .join(" ");
   };
 
+  const LetraCuadro = ({ letra }) => (
+    <div className="border border-gray-300 rounded-md p-2 m-1">
+      {letrasAdivinadas.includes(letra) ? letra : "_"}
+    </div>
+  );
+
   return (
-    <div>
-      <h1>Juego del ahorcado - {juego}</h1>
-      <div>
-        <p>Palabra oculta: {getPalabraOculta()}</p>
-        <p>Letras adivinadas: {letrasAdivinadas.join(", ")}</p>
-        <p>Letras incorrectas: {letrasIncorrectas.join(", ")}</p>
-        {estadoJuego === "jugando" && (
-          <>
-            <input
-              type="text"
-              id="letra"
-              placeholder="Introduce una letra"
-              maxLength="1"
-              value={inputLetra}
-              onChange={(e) => setInputLetra(e.target.value)}
-            />
-            <button onClick={comprobarLetra}>Comprobar</button>
-          </>
-        )}
-        {(estadoJuego === "perdido" || estadoJuego === "ganado") && (
-          <button onClick={reiniciarJuego}>Reiniciar</button>
-        )}
-      </div>
-      <div>
+    <div className="flex flex-col items-center space-y-4  ">
+      <div className="flex items-center">
         <p>Vidas restantes: {vidas}</p>
         {[...Array(vidas)].map((_, index) => (
           <FontAwesomeIcon key={index} icon={faHeart} style={{ color: "red", margin: "2px" }} />
         ))}
+      </div>
+      <div className="overflow-auto flex items-center h-full">
+        {palabraOculta.map((letra, index) => (
+          <LetraCuadro key={index} letra={letra} />
+        ))}
+      </div>
+      {estadoJuego === "jugando" && (
+        <div className="flex items-center space-x-2 ">
+          <input
+            type="text"
+            id="letra"
+            placeholder="Introduce una letra"
+            maxLength="1"
+            value={inputLetra}
+            onChange={(e) => setInputLetra(e.target.value)}
+            className="border border-gray-300 p-2 rounded-md"
+          />
+          <button onClick={comprobarLetra} className="bg-gray-300 p-2 rounded-full hover:bg-gray-600 hover:text-white">
+            Comprobar
+          </button>
+        </div>
+      )}
+      {(estadoJuego === "perdido" || estadoJuego === "ganado") && (
+        <button onClick={reiniciarJuego} className="bg-gray-300 p-2 rounded-full hover:bg-gray-600 hover:text-white">
+          Reiniciar
+        </button>
+      )}
+      <div>
+        <p>Letras adivinadas: {letrasAdivinadas.join(", ")}</p>
+        <p>Letras incorrectas: {letrasIncorrectas.join(", ")}</p>
       </div>
       {haTerminado() && (
         <div>
