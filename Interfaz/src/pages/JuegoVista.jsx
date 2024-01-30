@@ -1,8 +1,20 @@
-import { useParams } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Ahorcado from "./Ahorcado";
+import Test from "./Test";
 
-export default function JuegoVista() {
-  const { juego } = useParams()
+const JuegoVista = () => {
+  const { juego } = useParams();
+
   return (
-    <div>{juego}</div>
-  )
-}
+    <div>
+      <h1>Juego - {juego}</h1>
+      <div>
+        {juego === "ahorcado" && <Ahorcado />}
+        {juego === "test" && <Test />}
+      </div>
+    </div>
+  );
+};
+
+export default JuegoVista;
