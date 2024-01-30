@@ -60,10 +60,26 @@ const Ahorcado = () => {
       .map(letra => (letrasAdivinadas.includes(letra) ? letra : "_"))
       .join(" ");
   };
+  //cambios
+  const dibujoAhorcado = () => {
+    const dibujo = [
+      "  ________",
+      " |        |",
+      " |        " + (vidas < 6 ? "O" : ""),
+      " |       " + (vidas < 5 ? "/" : "") + (vidas < 4 ? "|" : "") + (vidas < 3 ? "\\" : ""),
+      " |       " + (vidas < 2 ? "/" : "") + " " + (vidas < 1 ? "\\" : ""),
+      " |",
+      " |___"
+    ];
+
+    return dibujo.map((line, index) => <div key={index}>{line}</div>);
+  };
 
   return (
     <div>
-      <h1>Juego del ahorcado - {juego}</h1>
+      <div>
+        {dibujoAhorcado()}
+      </div>
       <div>
         <p>Palabra oculta: {getPalabraOculta()}</p>
         <p>Letras adivinadas: {letrasAdivinadas.join(", ")}</p>
