@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import imagen1 from './img/ahorcado1.webp';
 import imagen2 from './img/ahorcado2.webp';
 import imagen3 from './img/ahorcado3.webp';
@@ -23,7 +21,7 @@ const Ahorcado = () => {
   }, [juego]);
 
   const reiniciarJuego = () => {
-    const palabras = ["perro", "gato", "casa", "árbol", "coche"];
+    const palabras = ["cpu", "memoria", "entradasalida", "sistemasinterconexion", "perifericos"];
     const palabraSeleccionada = palabras[Math.floor(Math.random() * palabras.length)];
     setPalabraOculta(palabraSeleccionada.split(""));
     setLetrasAdivinadas([]);
@@ -83,15 +81,12 @@ const Ahorcado = () => {
   }, [vidas]);
 
   return (
-    <div className="flex flex-col items-center space-y-4  ">
-       <div className="flex items-center justify-center mt-4">
+    <div className="flex flex-col space-y-4  ">
+       <div className="flex mt-4">
       <img src={imagenPath} alt="Ahorcado" style={{ width: '90px', height: '90px' }}/>
       </div>
       <div className="flex items-center">
-        <p>Vidas restantes: {vidas}</p>
-        {[...Array(vidas)].map((_, index) => (
-          <FontAwesomeIcon key={index} icon={faHeart} style={{ color: "red", margin: "2px" }} />
-        ))}
+        <p>Vidas restantes: {vidas}</p>        
       </div>
       <div className="overflow-auto flex items-center h-full">
         {palabraOculta.map((letra, index) => (
