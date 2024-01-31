@@ -11,7 +11,8 @@ class Curso(models.Model):
 # Topicos de cada curso (para aprendizaje)
 class Topico(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    contenido = models.JSONField()
+    nombre = models.CharField(max_length=255, default='')  # Campo nuevo
+    informacion = models.TextField(default='')
 
 # Modelo para juego de ahorcado (en referencia a un curso)
 class PalabraClave(models.Model):

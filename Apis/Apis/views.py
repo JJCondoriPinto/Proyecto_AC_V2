@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Quizz, Curso, PalabraClave, Topico
@@ -20,6 +20,15 @@ class PalabraClaveAPI(viewsets.ModelViewSet):
 class TopicoAPI(viewsets.ModelViewSet):
     serializer_class = TopicoSerializer
     queryset = Topico.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['nombre', 'informacion']  # Esto es para la funcionalidad de búsqueda
+
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Obtiene la consulta base, que es Topico.objects.all()
+        curso_id = self.request.query_params.get('curso', None)
+        if curso_id:
+            queryset = queryset.filter(curso=curso_id)  # Filtra por nombre de curso
+        return queryset
 
 @api_view(["GET"])
 def get_quizz_curso(request, id, *args, **kwargs):

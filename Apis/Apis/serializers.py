@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Quizz, Curso, Topico, PalabraClave
-import json
 
 class QuizzSerializer(serializers.ModelSerializer):
     cuestionario = serializers.JSONField()
@@ -16,8 +15,9 @@ class CursoSerializer(serializers.ModelSerializer):
 class TopicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topico
-        fields = "__all__"
-
+        fields = ['curso', 'nombre', 'informacion']  # Actualizado para usar los nuevos campos
+        
+        
 class PalabraClaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = PalabraClave

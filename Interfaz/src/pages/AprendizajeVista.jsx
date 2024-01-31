@@ -3,46 +3,28 @@ import { useParams, useNavigate  } from "react-router-dom";
 import { useMicro } from "../hooks/useMicro";
 import { EnviarIcon, MicDisabledIcon, MicEnabledIcon } from "../components/Icons";
 import { useVoice } from "../hooks/useVoice";
+import { obtener_info, obtener_topicos } from "../services/topicos";
 
 export default function AprendizajeVista() {
     const [input, setInput] = useState("");
     const [subtopicos, setSubtopicos] = useState([]); 
     const [infoTopico, setInfoTopico] = useState(""); 
-    const [hasSpoken, setHasSpoken] = useState(false); // Estado para controlar si ya se ha hablado
     const [speak] = useVoice();
     const { curso } = useParams(); 
     const [activar, desactivar, result, isActive] = useMicro();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!hasSpoken) { // Si aún no se ha hablado
-            speak(""); // Inicializa la síntesis de voz
-            fetchSubtopicos();
-        }
-    }, [curso, speak, hasSpoken]); // Agregar hasSpoken como dependencia
-
-    useEffect(() => {
-        setInput(result); 
-    }, [result]);
-
-    // Solicita los subtópicos del curso
-    const fetchSubtopicos = async () => {
-        try {
-            const cursoNombre = encodeURIComponent(curso); 
-            const response = await fetch(`http://localhost:8000/api/v1/topico/?curso=${cursoNombre}`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            setSubtopicos(data); 
-            // Leer en voz alta los nombres de los subtópicos sólo si aún no se ha hablado
-            if (!hasSpoken) {
-                const nombresTopicos = data.map(t => t.nombre).join(", ");
+        obtener_topicos(curso)
+            .then(res => {
+                setSubtopicos(res.data)
+                const nombresTopicos = res.data.map(t => t.nombre).join(", ");
                 speak(`Tópicos de ${curso}: ${nombresTopicos}`);
-                setHasSpoken(true); // Marcar que ya se ha hablado para no repetirlo
-            }
-        } catch (error) {
-            console.error('Hubo un problema con la petición fetch:', error);
-        }
-    };
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }, []);
 
     useEffect(() => {
         if (result) {
@@ -55,25 +37,17 @@ export default function AprendizajeVista() {
                 navigate('/aprendizaje');
             }
         }
-    }, [result, subtopicos, navigate]);
-
-
-
-
+    }, [result]);
 
     // Solicita la información de un subtópico específico
     const fetchInfoTopico = async (topicoNombre) => {
-        try {
-            const response = await fetch(`http://localhost:8000/api/v1/topico/?search=${encodeURIComponent(topicoNombre)}`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            if (data && data.length > 0) {
-                setInfoTopico(data[0].informacion); 
-                speak(data[0].informacion); 
-            }
-        } catch (error) {
-            console.error('Hubo un problema con la petición fetch:', error);
-        }
+        obtener_info(topicoNombre)
+            .then(res => {
+                setInfoTopico(res.data[0].informacion)
+            })
+            .catch(err => {
+                console.error(err);
+            })
     };
 
     const enviar = () => {
