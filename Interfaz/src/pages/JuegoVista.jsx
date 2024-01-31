@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Ahorcado from "./Ahorcado";
-import Test from "./Test";
+import TestImage from "./TestImage";
 import Memorama from "./Memorama";
 
 const JuegoVista = () => {
@@ -12,7 +12,7 @@ const JuegoVista = () => {
       <h1>Juego - {juego}</h1>
       <div>
         {juego === "ahorcado" && <Ahorcado />}
-        {juego === "test" && <Test />}
+        {juego === "testImage" && <TestImage />}
         {juego === "memorama" && <Memorama />}
       </div>
     </div>

@@ -3,6 +3,7 @@ import Card from '../components/Card'
 import computadorFondo from '../assets/juegos/computador_fondo.webp'
 import ahorcadoFondo from '../assets/juegos/juego_ahorcado.webp'
 import memorama from '../assets/juegos/memorama.webp'
+import TestImage from '../assets/juegos/TestImage.webp'
 
 export default function Juegos() {
   return (
@@ -14,10 +15,10 @@ export default function Juegos() {
         Ahorcado
       </Card>
       <Card
-        to={"test"}
-        imgSrc={computadorFondo}
+        to={"testImage"}
+        imgSrc={TestImage}
       >
-        Test
+        TestImage
       </Card>
       <Card
         to={"memorama"}
