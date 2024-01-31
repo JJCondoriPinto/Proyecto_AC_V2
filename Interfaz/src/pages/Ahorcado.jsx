@@ -8,22 +8,34 @@ import imagen3 from './img/ahorcado3.webp';
 import imagen4 from './img/ahorcado4.webp';
 import imagen5 from './img/ahorcado5.webp';
 import imagen6 from './img/ahorcado6.webp';
+import { obtener_palabras } from "../services/palabras";
 
-const Ahorcado = () => {
-  const { juego } = useParams();
+export default function Ahorcado() {
+  const { curso } = useParams();
   const [palabraOculta, setPalabraOculta] = useState([]);
   const [letrasAdivinadas, setLetrasAdivinadas] = useState([]);
   const [letrasIncorrectas, setLetrasIncorrectas] = useState([]);
   const [vidas, setVidas] = useState(6);
   const [inputLetra, setInputLetra] = useState("");
   const [estadoJuego, setEstadoJuego] = useState("jugando");
+  const [palabras, setPalabras] = useState([])
 
   useEffect(() => {
-    reiniciarJuego();
-  }, [juego]);
+    if (palabras.length > 0) 
+      reiniciarJuego();
+  }, [palabras])
+
+  useEffect(() => {
+    obtener_palabras(curso)
+      .then(res => {
+        setPalabras(res.data.map(p => p.palabra))
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, []);
 
   const reiniciarJuego = () => {
-    const palabras = ["perro", "gato", "casa", "árbol", "coche"];
     const palabraSeleccionada = palabras[Math.floor(Math.random() * palabras.length)];
     setPalabraOculta(palabraSeleccionada.split(""));
     setLetrasAdivinadas([]);
@@ -83,9 +95,9 @@ const Ahorcado = () => {
   }, [vidas]);
 
   return (
-    <div className="flex flex-col items-center space-y-4  ">
-       <div className="flex items-center justify-center mt-4">
-      <img src={imagenPath} alt="Ahorcado" style={{ width: '90px', height: '90px' }}/>
+    <div className="flex flex-col items-center space-y-4 w-full">
+      <div className="flex items-center justify-center mt-4">
+        <img src={imagenPath} alt="Ahorcado" style={{ width: '90px', height: '90px' }} />
       </div>
       <div className="flex items-center">
         <p>Vidas restantes: {vidas}</p>
@@ -131,5 +143,3 @@ const Ahorcado = () => {
     </div>
   );
 };
-
-export default Ahorcado;

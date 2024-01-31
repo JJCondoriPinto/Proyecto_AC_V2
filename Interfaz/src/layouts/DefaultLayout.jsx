@@ -5,9 +5,11 @@ import { useEffect } from "react";
 
 export default function DefaultLayout() {
   const [speak] = useVoice()
+  
   useEffect(() => {
     speak("Bienvenido a tu asistente virtual")
   }, [])
+
   return (
     <>
       <div className="flex h-screen justify-center items-center bg-gradient-to-tr from-primary via-slate-800 to-slate-900 bg-opacity-95">

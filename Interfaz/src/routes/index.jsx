@@ -1,9 +1,11 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
-import Aprendizaje from '../pages/Aprendizaje'
 import Juegos from '../pages/Juegos'
 import DefaultLayout from '../layouts/DefaultLayout'
-import JuegoVista from '../pages/JuegoVista'
 import AprendizajeVista from '../pages/AprendizajeVista'
+import CursosListado from '../pages/CursosListado'
+import ListadoQuizziz from '../pages/ListadoQuizziz'
+import FormularioQuizz from '../pages/FormularioQuizz'
+import Ahorcado from '../pages/Ahorcado'
 
 export const routes = createBrowserRouter([
     {
@@ -19,7 +21,7 @@ export const routes = createBrowserRouter([
                 children: [
                     {
                         path: "",
-                        element: <Aprendizaje />,
+                        element: <CursosListado />,
                     },
                     {
                         path: ":curso",
@@ -35,8 +37,39 @@ export const routes = createBrowserRouter([
                         element: <Juegos />,
                     },
                     {
-                        path: ":juego",
-                        element: <JuegoVista />
+                        path: "ahorcado",
+                        children: [
+                            {
+                                path: "",
+                                element: <CursosListado />
+                            },
+                            {
+                                path: ":curso",
+                                element: <Ahorcado />
+                            }
+                        ]
+                    },
+                    {
+                        path: "test",
+                        children: [
+                            {
+                                path: "",
+                                element: <CursosListado />
+                            },
+                            {
+                                path: ":curso",
+                                children: [
+                                    {
+                                        path: "",
+                                        element: <ListadoQuizziz />
+                                    },
+                                    {
+                                        path: ":quizz",
+                                        element: <FormularioQuizz />
+                                    }
+                                ]
+                            }
+                        ]
                     },
                 ]
             },

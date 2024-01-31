@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Quizz, Curso, Topico, PalabraClave
+import json
 
 class QuizzSerializer(serializers.ModelSerializer):
     cuestionario = serializers.JSONField()
