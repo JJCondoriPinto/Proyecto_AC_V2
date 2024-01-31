@@ -27,4 +27,11 @@ def get_quizz_curso(request, id, *args, **kwargs):
     quizzis = Quizz.objects.filter(curso=curso)
     serializer = QuizzSerializer(instance=quizzis, many=True)
     return Response(serializer.data)
+
+@api_view(["GET"])
+def get_palabra_curso(request, id, *args, **kwargs):
+    curso = get_object_or_404(Curso, pk=id)
+    palabras = PalabraClave.objects.filter(curso=curso)
+    serializer = PalabraClaveSerializer(instance=palabras, many=True)
+    return Response(serializer.data)
     

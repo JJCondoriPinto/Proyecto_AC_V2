@@ -5,6 +5,7 @@ import AprendizajeVista from '../pages/AprendizajeVista'
 import CursosListado from '../pages/CursosListado'
 import ListadoQuizziz from '../pages/ListadoQuizziz'
 import FormularioQuizz from '../pages/FormularioQuizz'
+import Ahorcado from '../pages/Ahorcado'
 
 export const routes = createBrowserRouter([
     {
@@ -37,6 +38,16 @@ export const routes = createBrowserRouter([
                     },
                     {
                         path: "ahorcado",
+                        children: [
+                            {
+                                path: "",
+                                element: <CursosListado />
+                            },
+                            {
+                                path: ":curso",
+                                element: <Ahorcado />
+                            }
+                        ]
                     },
                     {
                         path: "test",
