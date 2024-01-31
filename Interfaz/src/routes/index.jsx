@@ -6,6 +6,9 @@ import CursosListado from '../pages/CursosListado'
 import ListadoQuizziz from '../pages/ListadoQuizziz'
 import FormularioQuizz from '../pages/FormularioQuizz'
 import Ahorcado from '../pages/Ahorcado'
+import Memorama from '../pages/Memorama'
+import TestImage from '../pages/TestImage'
+import { TestRelacionar } from '../pages/TestRelacionar'
 
 export const routes = createBrowserRouter([
     {
@@ -68,6 +71,27 @@ export const routes = createBrowserRouter([
                                         element: <FormularioQuizz />
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        path: 'memorama',
+                        element: <Memorama />
+                    },
+                    {
+                        path: 'testImage',
+                        element: <TestImage />
+                    },
+                    {
+                        path: 'testRelacionar',
+                        children: [
+                            {
+                                path: "",
+                                element: <CursosListado />
+                            },
+                            {
+                                path: ":curso",
+                                element: <TestRelacionar />
                             }
                         ]
                     },

@@ -8,3 +8,7 @@ export function obtener_topicos(id) {
 export function obtener_info(nombre) {
     return api.get(`/topico/?search=${encodeURIComponent(nombre)}`)
 }
+
+export function obtener_topicos_curso(id){
+    return api.get(`/curso/${id}/topicos/`)
+}
