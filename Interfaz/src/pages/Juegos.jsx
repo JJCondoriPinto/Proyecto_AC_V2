@@ -2,6 +2,7 @@ import React from 'react'
 import Card from '../components/Card'
 import computadorFondo from '../assets/juegos/computador_fondo.webp'
 import ahorcadoFondo from '../assets/juegos/juego_ahorcado.webp'
+import memorama from '../assets/juegos/memorama.webp'
 
 export default function Juegos() {
   return (
@@ -20,7 +21,7 @@ export default function Juegos() {
       </Card>
       <Card
         to={"memorama"}
-        imgSrc={computadorFondo}
+        imgSrc={memorama}
       >
         Memorama
       </Card>
