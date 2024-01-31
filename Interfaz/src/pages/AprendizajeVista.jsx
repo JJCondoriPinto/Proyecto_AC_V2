@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import { useMicro } from "../hooks/useMicro";
 import { EnviarIcon, MicDisabledIcon, MicEnabledIcon } from "../components/Icons";
 import { useVoice } from "../hooks/useVoice";
@@ -12,6 +12,7 @@ export default function AprendizajeVista() {
     const [speak] = useVoice();
     const { curso } = useParams(); 
     const [activar, desactivar, result, isActive] = useMicro();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!hasSpoken) { // Si aún no se ha hablado
@@ -42,6 +43,24 @@ export default function AprendizajeVista() {
             console.error('Hubo un problema con la petición fetch:', error);
         }
     };
+
+    useEffect(() => {
+        if (result) {
+            const subtopicoEncontrado = subtopicos.find(subtopico => result.toLowerCase() === subtopico.nombre.toLowerCase());
+            if (subtopicoEncontrado) {
+                fetchInfoTopico(subtopicoEncontrado.nombre);
+            } else if (result.toLowerCase().includes('juegos')) {
+                navigate('/juegos');
+            } else if (result.toLowerCase().includes('aprendizaje')) {
+                navigate('/aprendizaje');
+            }
+        }
+    }, [result, subtopicos, navigate]);
+
+
+
+
+
     // Solicita la información de un subtópico específico
     const fetchInfoTopico = async (topicoNombre) => {
         try {
