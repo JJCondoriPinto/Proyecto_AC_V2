@@ -18,6 +18,12 @@ export default function Juegos() {
       >
         Test
       </Card>
+      <Card
+        to={"memorama"}
+        imgSrc={computadorFondo}
+      >
+        Memorama
+      </Card>
     </div>
   )
 }
