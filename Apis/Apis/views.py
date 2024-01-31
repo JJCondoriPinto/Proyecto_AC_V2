@@ -44,3 +44,15 @@ def get_palabra_curso(request, id, *args, **kwargs):
     serializer = PalabraClaveSerializer(instance=palabras, many=True)
     return Response(serializer.data)
     
+
+@api_view(["GET"])
+def get_test_curso_relacion(request, id, *args, **kwargs):
+    curso = get_object_or_404(Curso, pk=id)
+    topicos = Topico.objects.filter(curso=curso)
+    serializer_curso = CursoSerializer(instance=curso)
+    serializer_topicos = TopicoSerializer(instance=topicos, many=True)
+    return Response({
+        "curso": serializer_curso.data,
+        "topicos": serializer_topicos.data,
+    })
+    
