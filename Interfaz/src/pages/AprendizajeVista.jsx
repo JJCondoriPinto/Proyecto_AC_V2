@@ -4,6 +4,7 @@ import { useMicro } from "../hooks/useMicro";
 import { EnviarIcon, MicDisabledIcon, MicEnabledIcon } from "../components/Icons";
 import { useVoice } from "../hooks/useVoice";
 import { obtener_info, obtener_topicos } from "../services/topicos";
+import { obtener_cursos } from "../services/cursos";
 
 export default function AprendizajeVista() {
     const [input, setInput] = useState("");
@@ -11,19 +12,34 @@ export default function AprendizajeVista() {
     const [infoTopico, setInfoTopico] = useState(""); 
     const [speak] = useVoice();
     const { curso } = useParams(); 
+    const [cursoNombre, setCursoNombre] = useState(); 
     const [activar, desactivar, result, isActive] = useMicro();
     const navigate = useNavigate();
 
     useEffect(() => {
-        obtener_topicos(curso)
+        if (curso) {
+            obtener_cursos(curso)
+                .then(res => {
+                    setCursoNombre(res.data.nombre)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        }
+    }, [])
+
+    useEffect(() => {
+        if (curso) {
+            obtener_topicos(curso)
             .then(res => {
                 setSubtopicos(res.data)
                 const nombresTopicos = res.data.map(t => t.nombre).join(", ");
-                speak(`Tópicos de ${curso}: ${nombresTopicos}`);
+                speak(`Tópicos de ${cursoNombre}: ${nombresTopicos}`);
             })
             .catch(err => {
                 console.error(err);
             })
+        }
     }, []);
 
     useEffect(() => {
@@ -56,7 +72,7 @@ export default function AprendizajeVista() {
 
     return (
         <div className="flex flex-col gap-4 w-full">
-            <h2 className="font-semibold text-sm">Tópicos de {curso}</h2>
+            <h2 className="font-semibold text-sm">Tópicos de {cursoNombre}</h2>
             <div className="overflow-auto flex flex-col h-full">
                 <div>
                     {subtopicos.map((subtopico, index) => (
