@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate  } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useMicro } from "../hooks/useMicro";
 import { EnviarIcon, MicDisabledIcon, MicEnabledIcon } from "../components/Icons";
 import { useVoice } from "../hooks/useVoice";
@@ -8,11 +8,11 @@ import { obtener_cursos } from "../services/cursos";
 
 export default function AprendizajeVista() {
     const [input, setInput] = useState("");
-    const [subtopicos, setSubtopicos] = useState([]); 
-    const [infoTopico, setInfoTopico] = useState(""); 
+    const [subtopicos, setSubtopicos] = useState([]);
+    const [infoTopico, setInfoTopico] = useState("");
     const [speak] = useVoice();
-    const { curso } = useParams(); 
-    const [cursoNombre, setCursoNombre] = useState(); 
+    const { curso } = useParams();
+    const [cursoNombre, setCursoNombre] = useState();
     const [activar, desactivar, result, isActive] = useMicro();
     const navigate = useNavigate();
 
@@ -25,22 +25,22 @@ export default function AprendizajeVista() {
                 .catch(err => {
                     console.error(err);
                 })
-        }
-    }, [])
-
-    useEffect(() => {
-        if (curso) {
             obtener_topicos(curso)
-            .then(res => {
-                setSubtopicos(res.data)
-                const nombresTopicos = res.data.map(t => t.nombre).join(", ");
-                speak(`Tópicos de ${cursoNombre}: ${nombresTopicos}`);
-            })
-            .catch(err => {
-                console.error(err);
-            })
+                .then(res => {
+                    setSubtopicos(res.data)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+            }
+        }, [])
+        
+    useEffect(() => {
+        if (curso && cursoNombre) {
+            const nombresTopicos = subtopicos.map(t => t.nombre).join(", ");
+            speak(`Tópicos de ${cursoNombre}: ${nombresTopicos}`);
         }
-    }, []);
+    }, [cursoNombre, curso])
 
     useEffect(() => {
         if (result) {
@@ -67,7 +67,7 @@ export default function AprendizajeVista() {
     };
 
     const enviar = () => {
-        fetchInfoTopico(input); 
+        fetchInfoTopico(input);
     };
 
     return (
